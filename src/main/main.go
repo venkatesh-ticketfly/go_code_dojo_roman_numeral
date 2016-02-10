@@ -6,5 +6,6 @@ import (
 )
 
 func main() {
-	fmt.Printf("%u \n", roman.Numerals("I"))
+	val, err := roman.NewNumerals("I")
+	fmt.Println(val, err)
 }
