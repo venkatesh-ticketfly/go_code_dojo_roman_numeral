@@ -6,5 +6,5 @@ import (
 )
 
 func main() {
-	fmt.Printf("%u \n", roman.NewRomanNeumarals("I"))
+	fmt.Printf("%u \n", roman.Numerals("I"))
 }

@@ -12,9 +12,14 @@ const (
 	M = rune('M')
 )
 
+type Numerals interface {
+	Value() string
+	Add(numerals Numerals) Numerals
+}
+
 type numerals string
 
-func NewRomanNeumarals(numeral string) (numerals, error) {
+func NewNumerals(numeral string) (Numerals, error) {
 	nmls := make([]rune, len(numeral))
 	for idx, char := range numeral {
 		switch char {
@@ -25,4 +30,12 @@ func NewRomanNeumarals(numeral string) (numerals, error) {
 		}
 	}
 	return numerals(nmls), nil
+}
+
+func (n numerals) Value() string {
+	return string(n)
+}
+
+func (n numerals) Add(another Numerals) Numerals {
+	return numerals(n.Value() + another.Value())
 }
