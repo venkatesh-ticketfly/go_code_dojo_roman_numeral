@@ -7,7 +7,7 @@ func TestNewRomanNumaralsAcceptValidInput(t *testing.T) {
 		input string
 		expected numerals
 	} {
-		{"XVI", numerals("XVI")},
+		{"MDCLXVI", numerals("MDCLXVI")},
 	}
 
 	for _, test := range tests {
@@ -22,7 +22,7 @@ func TestNewRomanNumaralsAcceptValidInput(t *testing.T) {
 }
 
 func TestNewRomanNumaralsAcceptInvalidInput(t *testing.T) {
-	tests := []string{"0"}
+	tests := []string{"0", "a", "i"}
 
 	for _, input := range tests {
 		actual, err := NewRomanNeumarals(input)
