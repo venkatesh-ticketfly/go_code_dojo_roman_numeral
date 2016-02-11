@@ -4,9 +4,9 @@ import "testing"
 
 func TestNewRomanNumaralsAcceptValidInput(t *testing.T) {
 	tests := []struct {
-		input string
+		input    string
 		expected Numerals
-	} {
+	}{
 		{"MDCLXVI", Numerals{"MDCLXVI"}},
 	}
 
@@ -36,9 +36,9 @@ func TestNewRomanNumarelsAcceptInvalidInput(t *testing.T) {
 
 func TestAdditiveSuffixToSubtractivePrefix(t *testing.T) {
 	tests := []struct {
-		input Numerals
+		input    Numerals
 		expected Numerals
-	} {
+	}{
 		{Numerals{"IIII"}, Numerals{"IV"}},
 		{Numerals{"VIIII"}, Numerals{"IX"}},
 		{Numerals{"XXXX"}, Numerals{"XL"}},
@@ -56,9 +56,9 @@ func TestAdditiveSuffixToSubtractivePrefix(t *testing.T) {
 	}
 }
 
-func TestAdditiveSuffixToHigherNumeralReduction(t *testing.T) {
+func TestAdditiveSuffixToSingleSuffixNormalization(t *testing.T) {
 	tests := []struct {
-		input Numerals
+		input    Numerals
 		expected Numerals
 	}{
 		{Numerals{"IIIII"}, Numerals{"V"}},
@@ -67,11 +67,39 @@ func TestAdditiveSuffixToHigherNumeralReduction(t *testing.T) {
 		{Numerals{"LL"}, Numerals{"C"}},
 		{Numerals{"CCCCC"}, Numerals{"D"}},
 		{Numerals{"DD"}, Numerals{"M"}},
+
+		{Numerals{"VIIIII"}, Numerals{"X"}},
+		{Numerals{"XXXXVIIIII"}, Numerals{"L"}},
+		{Numerals{"LXXXXVIIIII"}, Numerals{"C"}},
+		{Numerals{"CCCCLXXXXVIIIII"}, Numerals{"D"}},
+		{Numerals{"DCCCCLXXXXVIIIII"}, Numerals{"M"}},
 	}
 
+	for _, test := range tests {
+		actual := additiveSuffixToSingleSuffixNormalization(test.input)
+
+		if actual != test.expected {
+			t.Error("Expected ", test.expected, " but was ", actual)
+		}
+	}
+}
+
+func TestNormalization(t *testing.T) {
+	tests := []struct {
+		input    Numerals
+		expected Numerals
+	}{
+		{Numerals{"IIIIIIIII"}, Numerals{"IX"}},
+		{Numerals{"VVVVVVVV"}, Numerals{"XL"}},
+		{Numerals{"XXXXXXXXX"}, Numerals{"XC"}},
+		{Numerals{"LLLLLLLL"}, Numerals{"CD"}},
+		{Numerals{"CCCCCCCCC"}, Numerals{"CM"}},
+
+		{Numerals{"XXXVIIIII"}, Numerals{"XL"}},
+	}
 
 	for _, test := range tests {
-		actual := additiveSuffixToHigherNumeralNormalization(test.input)
+		actual := normalize(test.input)
 
 		if actual != test.expected {
 			t.Error("Expected ", test.expected, " but was ", actual)

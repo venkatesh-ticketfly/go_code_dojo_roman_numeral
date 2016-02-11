@@ -25,7 +25,7 @@ var orderedNumeral = map[rune]int{
 	M: 7,
 }
 
-var numeralValueMap = map[rune]int {
+var numeralValueMap = map[rune]int{
 	I: 1,
 	V: 5,
 	X: 10,
@@ -57,10 +57,17 @@ func NewNumerals(numeral string) (Numerals, error) {
 }
 
 func (n1 Numerals) Add(n2 Numerals) Numerals {
-	appendedNumerals :=  Numerals{n1.value + n2.value}
-	return additiveSuffixToSubtractivePrefixNormalization(appendedNumerals)
+	appendedNumerals := Numerals{n1.value + n2.value}
+	return normalize(appendedNumerals)
 }
 
+// Order of normalization matters
+func normalize(n Numerals) Numerals {
+	higherNumeralNormalized := additiveSuffixToSingleSuffixNormalization(n)
+	return additiveSuffixToSubtractivePrefixNormalization(higherNumeralNormalized)
+}
+
+// Order of rewrite matters
 func additiveSuffixToSubtractivePrefixNormalization(n Numerals) Numerals {
 	rewriteDCCCCtoCM := strings.Replace(n.value, "DCCCC", "CM", -1)
 	rewriteCCCCtoCD := strings.Replace(rewriteDCCCCtoCM, "CCCC", "CD", -1)
@@ -71,7 +78,8 @@ func additiveSuffixToSubtractivePrefixNormalization(n Numerals) Numerals {
 	return Numerals{rewriteIIIItoIV}
 }
 
-func additiveSuffixToHigherNumeralNormalization(n Numerals) Numerals {
+// Order of rewrite matters
+func additiveSuffixToSingleSuffixNormalization(n Numerals) Numerals {
 	rewriteIIIIItoV := strings.Replace(n.value, "IIIII", "V", -1)
 	rewriteVVtoX := strings.Replace(rewriteIIIIItoV, "VV", "X", -1)
 	rewriteXXXXXtoL := strings.Replace(rewriteVVtoX, "XXXXX", "L", -1)
