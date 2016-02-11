@@ -55,3 +55,26 @@ func TestAdditiveSuffixToSubtractivePrefix(t *testing.T) {
 		}
 	}
 }
+
+func TestAdditiveSuffixToHigherNumeralReduction(t *testing.T) {
+	tests := []struct {
+		input Numerals
+		expected Numerals
+	}{
+		{Numerals{"IIIII"}, Numerals{"V"}},
+		{Numerals{"VV"}, Numerals{"X"}},
+		{Numerals{"XXXXX"}, Numerals{"L"}},
+		{Numerals{"LL"}, Numerals{"C"}},
+		{Numerals{"CCCCC"}, Numerals{"D"}},
+		{Numerals{"DD"}, Numerals{"M"}},
+	}
+
+
+	for _, test := range tests {
+		actual := additiveSuffixToHigherNumeralReduction(test.input)
+
+		if actual != test.expected {
+			t.Error("Expected ", test.expected, " but was ", actual)
+		}
+	}
+}

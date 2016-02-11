@@ -70,3 +70,13 @@ func additiveSuffixToSubtractivePrefixReduction(n Numerals) Numerals {
 	rewriteIIIItoIV := strings.Replace(rewriteVIIIItoIX, "IIII", "IV", -1)
 	return Numerals{rewriteIIIItoIV}
 }
+
+func additiveSuffixToHigherNumeralReduction(n Numerals) Numerals {
+	rewriteIIIIItoV := strings.Replace(n.value, "IIIII", "V", -1)
+	rewriteVVtoX := strings.Replace(rewriteIIIIItoV, "VV", "X", -1)
+	rewriteXXXXXtoL := strings.Replace(rewriteVVtoX, "XXXXX", "L", -1)
+	rewriteLLtoC := strings.Replace(rewriteXXXXXtoL, "LL", "C", -1)
+	rewriteCCCCCtoD := strings.Replace(rewriteLLtoC, "CCCCC", "D", -1)
+	rewriteDDtoM := strings.Replace(rewriteCCCCCtoD, "DD", "M", -1)
+	return Numerals{rewriteDDtoM}
+}
