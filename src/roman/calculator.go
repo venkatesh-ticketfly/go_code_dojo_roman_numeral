@@ -58,10 +58,10 @@ func NewNumerals(numeral string) (Numerals, error) {
 
 func (n1 Numerals) Add(n2 Numerals) Numerals {
 	appendedNumerals :=  Numerals{n1.value + n2.value}
-	return additiveSuffixToSubtractivePrefixReduction(appendedNumerals)
+	return additiveSuffixToSubtractivePrefixNormalization(appendedNumerals)
 }
 
-func additiveSuffixToSubtractivePrefixReduction(n Numerals) Numerals {
+func additiveSuffixToSubtractivePrefixNormalization(n Numerals) Numerals {
 	rewriteDCCCCtoCM := strings.Replace(n.value, "DCCCC", "CM", -1)
 	rewriteCCCCtoCD := strings.Replace(rewriteDCCCCtoCM, "CCCC", "CD", -1)
 	rewriteLXXXXtoXC := strings.Replace(rewriteCCCCtoCD, "LXXXX", "XC", -1)
@@ -71,7 +71,7 @@ func additiveSuffixToSubtractivePrefixReduction(n Numerals) Numerals {
 	return Numerals{rewriteIIIItoIV}
 }
 
-func additiveSuffixToHigherNumeralReduction(n Numerals) Numerals {
+func additiveSuffixToHigherNumeralNormalization(n Numerals) Numerals {
 	rewriteIIIIItoV := strings.Replace(n.value, "IIIII", "V", -1)
 	rewriteVVtoX := strings.Replace(rewriteIIIIItoV, "VV", "X", -1)
 	rewriteXXXXXtoL := strings.Replace(rewriteVVtoX, "XXXXX", "L", -1)

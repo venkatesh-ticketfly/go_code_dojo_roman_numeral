@@ -48,7 +48,7 @@ func TestAdditiveSuffixToSubtractivePrefix(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		actual := additiveSuffixToSubtractivePrefixReduction(test.input)
+		actual := additiveSuffixToSubtractivePrefixNormalization(test.input)
 
 		if actual != test.expected {
 			t.Error("Expected ", test.expected, " but was ", actual)
@@ -71,7 +71,7 @@ func TestAdditiveSuffixToHigherNumeralReduction(t *testing.T) {
 
 
 	for _, test := range tests {
-		actual := additiveSuffixToHigherNumeralReduction(test.input)
+		actual := additiveSuffixToHigherNumeralNormalization(test.input)
 
 		if actual != test.expected {
 			t.Error("Expected ", test.expected, " but was ", actual)
