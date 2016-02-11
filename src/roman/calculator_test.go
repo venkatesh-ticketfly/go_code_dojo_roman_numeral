@@ -34,17 +34,21 @@ func TestNewRomanNumarelsAcceptInvalidInput(t *testing.T) {
 	}
 }
 
-func TestRomanNumeralAddition(t *testing.T) {
+func TestAdditiveSuffixToSubtractivePrefix(t *testing.T) {
 	tests := []struct {
-		num1 Numerals
-		num2 Numerals
+		input Numerals
 		expected Numerals
 	} {
-		{Numerals{"I"}, Numerals{"I"}, Numerals{"II"}},
+		{Numerals{"IIII"}, Numerals{"IV"}},
+		{Numerals{"VIIII"}, Numerals{"IX"}},
+		{Numerals{"XXXX"}, Numerals{"XL"}},
+		{Numerals{"LXXXX"}, Numerals{"XC"}},
+		{Numerals{"CCCC"}, Numerals{"CD"}},
+		{Numerals{"DCCCC"}, Numerals{"CM"}},
 	}
 
 	for _, test := range tests {
-		actual := test.num1.Add(test.num2)
+		actual := additiveSuffixToSubtractivePrefixReduction(test.input)
 
 		if actual != test.expected {
 			t.Error("Expected ", test.expected, " but was ", actual)

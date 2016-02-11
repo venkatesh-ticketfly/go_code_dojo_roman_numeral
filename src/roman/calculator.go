@@ -2,6 +2,7 @@ package roman
 
 import (
 	"fmt"
+	"strings"
 )
 
 const (
@@ -56,5 +57,16 @@ func NewNumerals(numeral string) (Numerals, error) {
 }
 
 func (n1 Numerals) Add(n2 Numerals) Numerals {
-	return Numerals{n1.value + n2.value}
+	appendedNumerals :=  Numerals{n1.value + n2.value}
+	return additiveSuffixToSubtractivePrefixReduction(appendedNumerals)
+}
+
+func additiveSuffixToSubtractivePrefixReduction(n Numerals) Numerals {
+	rewriteDCCCCtoCM := strings.Replace(n.value, "DCCCC", "CM", -1)
+	rewriteCCCCtoCD := strings.Replace(rewriteDCCCCtoCM, "CCCC", "CD", -1)
+	rewriteLXXXXtoXC := strings.Replace(rewriteCCCCtoCD, "LXXXX", "XC", -1)
+	rewriteXXXXtoXL := strings.Replace(rewriteLXXXXtoXC, "XXXX", "XL", -1)
+	rewriteVIIIItoIX := strings.Replace(rewriteXXXXtoXL, "VIIII", "IX", -1)
+	rewriteIIIItoIV := strings.Replace(rewriteVIIIItoIX, "IIII", "IV", -1)
+	return Numerals{rewriteIIIItoIV}
 }
