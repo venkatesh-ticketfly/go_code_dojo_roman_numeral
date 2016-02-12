@@ -96,10 +96,13 @@ func TestNormalization(t *testing.T) {
 		{Numerals{"CCCCCCCCC"}, Numerals{"CM"}},
 
 		{Numerals{"XXXVIIIII"}, Numerals{"XL"}},
+
+		// Unsorted
+		{Numerals{"IIVIIIXXX"}, Numerals{"XL"}},
 	}
 
 	for _, test := range tests {
-		actual := normalize(test.input)
+		actual := normalizeAdditiveSuffix(test.input)
 
 		if actual != test.expected {
 			t.Error("Expected ", test.expected, " but was ", actual)

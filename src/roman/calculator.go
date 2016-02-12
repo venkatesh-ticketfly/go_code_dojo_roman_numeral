@@ -3,6 +3,7 @@ package roman
 import (
 	"fmt"
 	"strings"
+	"sort"
 )
 
 const (
@@ -23,16 +24,6 @@ var orderedNumeral = map[rune]int{
 	C: 5,
 	D: 6,
 	M: 7,
-}
-
-var numeralValueMap = map[rune]int{
-	I: 1,
-	V: 5,
-	X: 10,
-	L: 50,
-	C: 100,
-	D: 500,
-	M: 1000,
 }
 
 type Numerals struct {
@@ -58,13 +49,34 @@ func NewNumerals(numeral string) (Numerals, error) {
 
 func (n1 Numerals) Add(n2 Numerals) Numerals {
 	appendedNumerals := Numerals{n1.value + n2.value}
-	return normalize(appendedNumerals)
+	return normalizeAdditiveSuffix(appendedNumerals)
 }
 
 // Order of normalization matters
-func normalize(n Numerals) Numerals {
-	higherNumeralNormalized := additiveSuffixToSingleSuffixNormalization(n)
+func normalizeAdditiveSuffix(n Numerals) Numerals {
+	sortedNumerals := sortNumerals(n)
+	higherNumeralNormalized := additiveSuffixToSingleSuffixNormalization(sortedNumerals)
 	return additiveSuffixToSubtractivePrefixNormalization(higherNumeralNormalized)
+}
+
+type sortableNumerals []rune
+
+func (s sortableNumerals) Len() int {
+	return len(s)
+}
+
+func (s sortableNumerals) Less(i, j int) bool {
+	return orderedNumeral[s[j]] <  orderedNumeral[s[i]]
+}
+
+func (s sortableNumerals) Swap(i, j int) {
+	s[i], s[j] = s[j], s[i]
+}
+
+func sortNumerals(n Numerals) Numerals {
+	nRunes := sortableNumerals(n.value)
+	sort.Sort(nRunes)
+	return Numerals{string(nRunes)}
 }
 
 // Order of rewrite matters
