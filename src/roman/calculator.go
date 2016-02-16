@@ -49,7 +49,12 @@ func NewNumerals(numeral string) (Numerals, error) {
 
 func (n1 Numerals) Add(n2 Numerals) Numerals {
 	appendedNumerals := Numerals{n1.value + n2.value}
-	return normalizeAdditiveSuffix(appendedNumerals)
+	return normalize(appendedNumerals)
+}
+
+func normalize(n Numerals) Numerals {
+	subtractiveToAdditiveSuffix := subtractivePrefixToAdditiveSuffixNormalization(n)
+	return normalizeAdditiveSuffix(subtractiveToAdditiveSuffix)
 }
 
 // Order of normalization matters
@@ -77,6 +82,17 @@ func sortNumerals(n Numerals) Numerals {
 	nRunes := sortableNumerals(n.value)
 	sort.Sort(nRunes)
 	return Numerals{string(nRunes)}
+}
+
+func subtractivePrefixToAdditiveSuffixNormalization(n Numerals) Numerals {
+	rewriteIVtoIIII := strings.Replace(n.value, "IV", "IIII", -1)
+	rewriteIXtoVIIII := strings.Replace(rewriteIVtoIIII, "IX", "VIIII", -1)
+	rewriteXLtoXXXX := strings.Replace(rewriteIXtoVIIII, "XL", "XXXX", -1)
+	rewriteXCtoLXXXX := strings.Replace(rewriteXLtoXXXX, "XC", "LXXXX", -1)
+	rewriteCDtoCCCC := strings.Replace(rewriteXCtoLXXXX, "CD", "CCCC", -1)
+	rewriteDCCCCtoCM := strings.Replace(rewriteCDtoCCCC, "DCCCC", "CM", -1)
+
+	return Numerals{rewriteDCCCCtoCM}
 }
 
 // Order of rewrite matters

@@ -1,6 +1,8 @@
 package roman
 
-import "testing"
+import (
+	"testing"
+)
 
 func TestNewRomanNumaralsAcceptValidInput(t *testing.T) {
 	tests := []struct {
@@ -84,7 +86,29 @@ func TestAdditiveSuffixToSingleSuffixNormalization(t *testing.T) {
 	}
 }
 
-func TestNormalization(t *testing.T) {
+func TestSubtractivePrefixToAdditiveSuffixNormalization(t *testing.T) {
+	tests := []struct {
+		input Numerals
+		expected Numerals
+	} {
+		{Numerals{"IV"}, Numerals{"IIII"}},
+		{Numerals{"IX"}, Numerals{"VIIII"}},
+		{Numerals{"XL"}, Numerals{"XXXX"}},
+		{Numerals{"XC"}, Numerals{"LXXXX"}},
+		{Numerals{"CD"}, Numerals{"CCCC"}},
+		{Numerals{"DCCCC"}, Numerals{"CM"}},
+	}
+
+	for _, test := range tests {
+		actual := subtractivePrefixToAdditiveSuffixNormalization(test.input)
+
+		if actual != test.expected {
+			t.Error("Expected ", test.expected, " but was ", actual)
+		}
+	}
+}
+
+func TestNormalizationAdditiveSuffix(t *testing.T) {
 	tests := []struct {
 		input    Numerals
 		expected Numerals
@@ -103,6 +127,23 @@ func TestNormalization(t *testing.T) {
 
 	for _, test := range tests {
 		actual := normalizeAdditiveSuffix(test.input)
+
+		if actual != test.expected {
+			t.Error("Expected ", test.expected, " but was ", actual)
+		}
+	}
+}
+
+func TestNormalization(t *testing.T) {
+	tests := []struct {
+		input    Numerals
+		expected Numerals
+	}{
+
+	}
+
+	for _, test := range tests {
+		actual := normalize(test.input)
 
 		if actual != test.expected {
 			t.Error("Expected ", test.expected, " but was ", actual)
