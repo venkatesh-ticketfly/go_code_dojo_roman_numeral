@@ -139,7 +139,7 @@ func TestNormalization(t *testing.T) {
 		input    Numerals
 		expected Numerals
 	}{
-
+		{Numerals{"XXXIVVI"}, Numerals{"XL"}},
 	}
 
 	for _, test := range tests {
