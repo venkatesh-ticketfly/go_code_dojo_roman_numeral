@@ -80,7 +80,7 @@ func TestAdditiveSuffixToSingleSuffixNormalization(t *testing.T) {
 	}
 
 	for _, test := range tests {
-		actual :=  additiveSuffixToSingleSuffixRules.normalize(test.input)
+		actual := additiveSuffixToSingleSuffixRules.normalize(test.input)
 
 		if actual != test.expected {
 			t.Error("Expected ", test.expected, " but was ", actual)

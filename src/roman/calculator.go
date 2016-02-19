@@ -60,7 +60,7 @@ func normalize(n Numerals) Numerals {
 // Order of normalization matters
 func normalizeAdditiveSuffix(n Numerals) Numerals {
 	sortedNumerals := sortNumerals(n)
-	higherNumeralNormalized :=  additiveSuffixToSingleSuffixRules.normalize(sortedNumerals)
+	higherNumeralNormalized := additiveSuffixToSingleSuffixRules.normalize(sortedNumerals)
 	return additiveSuffixToSubtractivePrefixRules.normalize(higherNumeralNormalized)
 }
 
@@ -94,8 +94,7 @@ type normalizationRules []normalizationRule
 func (rules normalizationRules) normalize(n Numerals) Numerals {
 	convertedNumerals := n.value
 	for _, rule := range rules {
-		convertedNumerals = strings.Replace(convertedNumerals,
-			rule.from, rule.to, -1)
+		convertedNumerals = strings.Replace(convertedNumerals, rule.from, rule.to, -1)
 	}
 
 	return Numerals{convertedNumerals}
