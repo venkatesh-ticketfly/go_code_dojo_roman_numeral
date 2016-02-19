@@ -53,15 +53,15 @@ func (n1 Numerals) Add(n2 Numerals) Numerals {
 }
 
 func normalize(n Numerals) Numerals {
-	subtractiveToAdditiveSuffix := subtractivePrefixToAdditiveSuffixNormalization(n)
+	subtractiveToAdditiveSuffix := subtractivePrefixToAdditiveSuffixRules.normalize(n)
 	return normalizeAdditiveSuffix(subtractiveToAdditiveSuffix)
 }
 
 // Order of normalization matters
 func normalizeAdditiveSuffix(n Numerals) Numerals {
 	sortedNumerals := sortNumerals(n)
-	higherNumeralNormalized := additiveSuffixToSingleSuffixNormalization(sortedNumerals)
-	return additiveSuffixToSubtractivePrefixNormalization(higherNumeralNormalized)
+	higherNumeralNormalized :=  additiveSuffixToSingleSuffixRules.normalize(sortedNumerals)
+	return additiveSuffixToSubtractivePrefixRules.normalize(higherNumeralNormalized)
 }
 
 type sortableNumerals []rune
@@ -127,19 +127,3 @@ var additiveSuffixToSingleSuffixRules normalizationRules = normalizationRules([]
 	{"CCCCC", "D"},
 	{"DD", "M"},
 })
-
-
-// Order of rewrite matters
-func subtractivePrefixToAdditiveSuffixNormalization(n Numerals) Numerals {
-	return subtractivePrefixToAdditiveSuffixRules.normalize(n)
-}
-
-// Order of rewrite matters
-func additiveSuffixToSubtractivePrefixNormalization(n Numerals) Numerals {
-	return additiveSuffixToSubtractivePrefixRules.normalize(n)
-}
-
-// Order of rewrite matters
-func additiveSuffixToSingleSuffixNormalization(n Numerals) Numerals {
-	return additiveSuffixToSingleSuffixRules.normalize(n)
-}
