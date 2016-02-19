@@ -2,8 +2,8 @@ package roman
 
 import (
 	"fmt"
-	"strings"
 	"sort"
+	"strings"
 )
 
 const (
@@ -71,7 +71,7 @@ func (s sortableNumerals) Len() int {
 }
 
 func (s sortableNumerals) Less(i, j int) bool {
-	return orderedNumeral[s[j]] <  orderedNumeral[s[i]]
+	return orderedNumeral[s[j]] < orderedNumeral[s[i]]
 }
 
 func (s sortableNumerals) Swap(i, j int) {
@@ -84,15 +84,36 @@ func sortNumerals(n Numerals) Numerals {
 	return Numerals{string(nRunes)}
 }
 
-func subtractivePrefixToAdditiveSuffixNormalization(n Numerals) Numerals {
-	rewriteIVtoIIII := strings.Replace(n.value, "IV", "IIII", -1)
-	rewriteIXtoVIIII := strings.Replace(rewriteIVtoIIII, "IX", "VIIII", -1)
-	rewriteXLtoXXXX := strings.Replace(rewriteIXtoVIIII, "XL", "XXXX", -1)
-	rewriteXCtoLXXXX := strings.Replace(rewriteXLtoXXXX, "XC", "LXXXX", -1)
-	rewriteCDtoCCCC := strings.Replace(rewriteXCtoLXXXX, "CD", "CCCC", -1)
-	rewriteDCCCCtoCM := strings.Replace(rewriteCDtoCCCC, "DCCCC", "CM", -1)
+type normalizationRule struct {
+	from string
+	to   string
+}
 
-	return Numerals{rewriteDCCCCtoCM}
+type normalizationRules []normalizationRule
+
+func (rules normalizationRules) normalize(n Numerals) Numerals {
+	convertedNumerals := n.value
+	for _, rule := range rules {
+		convertedNumerals = strings.Replace(convertedNumerals,
+			rule.from, rule.to, -1)
+	}
+
+	return Numerals{convertedNumerals}
+}
+
+var subtractivePrefixToAdditiveSuffixRules normalizationRules = normalizationRules(
+	[]normalizationRule{
+		{"IV", "IIII"},
+		{"IX", "VIIII"},
+		{"XL", "XXXX"},
+		{"XC", "LXXXX"},
+		{"CD", "CCCC"},
+		{"CM", "DCCCC"},
+	})
+
+// Order of rewrite matters
+func subtractivePrefixToAdditiveSuffixNormalization(n Numerals) Numerals {
+	return subtractivePrefixToAdditiveSuffixRules.normalize(n)
 }
 
 // Order of rewrite matters

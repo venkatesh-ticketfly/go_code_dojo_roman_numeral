@@ -47,6 +47,8 @@ func TestAdditiveSuffixToSubtractivePrefix(t *testing.T) {
 		{Numerals{"LXXXX"}, Numerals{"XC"}},
 		{Numerals{"CCCC"}, Numerals{"CD"}},
 		{Numerals{"DCCCC"}, Numerals{"CM"}},
+
+		// Rewrite order verification
 	}
 
 	for _, test := range tests {
@@ -88,15 +90,15 @@ func TestAdditiveSuffixToSingleSuffixNormalization(t *testing.T) {
 
 func TestSubtractivePrefixToAdditiveSuffixNormalization(t *testing.T) {
 	tests := []struct {
-		input Numerals
+		input    Numerals
 		expected Numerals
-	} {
+	}{
 		{Numerals{"IV"}, Numerals{"IIII"}},
 		{Numerals{"IX"}, Numerals{"VIIII"}},
 		{Numerals{"XL"}, Numerals{"XXXX"}},
 		{Numerals{"XC"}, Numerals{"LXXXX"}},
 		{Numerals{"CD"}, Numerals{"CCCC"}},
-		{Numerals{"DCCCC"}, Numerals{"CM"}},
+		{Numerals{"CM"}, Numerals{"DCCCC"}},
 	}
 
 	for _, test := range tests {
