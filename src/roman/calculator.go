@@ -101,15 +101,24 @@ func (rules normalizationRules) normalize(n Numerals) Numerals {
 	return Numerals{convertedNumerals}
 }
 
-var subtractivePrefixToAdditiveSuffixRules normalizationRules = normalizationRules(
-	[]normalizationRule{
-		{"IV", "IIII"},
-		{"IX", "VIIII"},
-		{"XL", "XXXX"},
-		{"XC", "LXXXX"},
-		{"CD", "CCCC"},
-		{"CM", "DCCCC"},
-	})
+var subtractivePrefixToAdditiveSuffixRules normalizationRules = normalizationRules([]normalizationRule{
+	{"IV", "IIII"},
+	{"IX", "VIIII"},
+	{"XL", "XXXX"},
+	{"XC", "LXXXX"},
+	{"CD", "CCCC"},
+	{"CM", "DCCCC"},
+})
+
+var additiveSuffixToSingleSuffixRules normalizationRules = normalizationRules([]normalizationRule{
+	{"IIIII", "V"},
+	{"VV", "X"},
+	{"XXXXX", "L"},
+	{"LL", "C"},
+	{"CCCCC", "D"},
+	{"DD", "M"},
+})
+
 
 // Order of rewrite matters
 func subtractivePrefixToAdditiveSuffixNormalization(n Numerals) Numerals {
@@ -129,11 +138,5 @@ func additiveSuffixToSubtractivePrefixNormalization(n Numerals) Numerals {
 
 // Order of rewrite matters
 func additiveSuffixToSingleSuffixNormalization(n Numerals) Numerals {
-	rewriteIIIIItoV := strings.Replace(n.value, "IIIII", "V", -1)
-	rewriteVVtoX := strings.Replace(rewriteIIIIItoV, "VV", "X", -1)
-	rewriteXXXXXtoL := strings.Replace(rewriteVVtoX, "XXXXX", "L", -1)
-	rewriteLLtoC := strings.Replace(rewriteXXXXXtoL, "LL", "C", -1)
-	rewriteCCCCCtoD := strings.Replace(rewriteLLtoC, "CCCCC", "D", -1)
-	rewriteDDtoM := strings.Replace(rewriteCCCCCtoD, "DD", "M", -1)
-	return Numerals{rewriteDDtoM}
+	return additiveSuffixToSingleSuffixRules.normalize(n)
 }
