@@ -110,6 +110,15 @@ var subtractivePrefixToAdditiveSuffixRules normalizationRules = normalizationRul
 	{"CM", "DCCCC"},
 })
 
+var additiveSuffixToSubtractivePrefixRules normalizationRules = normalizationRules([]normalizationRule{
+	{"DCCCC", "CM"},
+	{"CCCC", "CD"},
+	{"LXXXX", "XC"},
+	{"XXXX", "XL"},
+	{"VIIII", "IX"},
+	{"IIII", "IV"},
+})
+
 var additiveSuffixToSingleSuffixRules normalizationRules = normalizationRules([]normalizationRule{
 	{"IIIII", "V"},
 	{"VV", "X"},
@@ -127,13 +136,7 @@ func subtractivePrefixToAdditiveSuffixNormalization(n Numerals) Numerals {
 
 // Order of rewrite matters
 func additiveSuffixToSubtractivePrefixNormalization(n Numerals) Numerals {
-	rewriteDCCCCtoCM := strings.Replace(n.value, "DCCCC", "CM", -1)
-	rewriteCCCCtoCD := strings.Replace(rewriteDCCCCtoCM, "CCCC", "CD", -1)
-	rewriteLXXXXtoXC := strings.Replace(rewriteCCCCtoCD, "LXXXX", "XC", -1)
-	rewriteXXXXtoXL := strings.Replace(rewriteLXXXXtoXC, "XXXX", "XL", -1)
-	rewriteVIIIItoIX := strings.Replace(rewriteXXXXtoXL, "VIIII", "IX", -1)
-	rewriteIIIItoIV := strings.Replace(rewriteVIIIItoIX, "IIII", "IV", -1)
-	return Numerals{rewriteIIIItoIV}
+	return additiveSuffixToSubtractivePrefixRules.normalize(n)
 }
 
 // Order of rewrite matters
